@@ -46,6 +46,7 @@ end
 
 gem 'country_select'
 gem 'devise'
+gem 'fog-softlayer'
 gem 'haml-rails'
 gem 'json'
 gem 'responders'
