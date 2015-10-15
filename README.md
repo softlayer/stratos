@@ -29,7 +29,7 @@ We want to enable users to re-use parts of this rails application into his own d
 
 * Twitter bootstrap / Flat UI
 
-Everybody wants a beatiful interface, so why not use [Flat UI](http://designmodo.github.io/Flat-UI/) it makes beatiful using twitter bootstrap, with well designed components.
+Everybody wants a beautiful interface, so why not use [Flat UI](http://designmodo.github.io/Flat-UI/) it makes beautiful using twitter bootstrap, with well designed components.
 
 * Trailblazer
 
