@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5.1'
+gem 'rails', '4.2.6'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use SCSS for stylesheets
@@ -46,7 +46,7 @@ end
 
 gem 'country_select'
 gem 'devise'
-gem 'fog-softlayer'
+gem 'softlayer'
 gem 'haml-rails'
 gem 'json'
 gem 'responders'
@@ -61,12 +61,18 @@ group :development do
   gem 'guard-bundler', require: false
   gem 'guard-livereload', require: false
   gem 'guard-rspec', require: false
-  gem 'jazz_fingers'
   gem 'letter_opener'
-  gem 'listen', '~> 2.7.12'
   gem 'quiet_assets'
   gem 'spring-commands-rspec'
   gem 'thin'
+  # pry stuff
+  gem 'pry'
+  gem 'pry-rails'
+  gem 'pry-doc'
+  gem 'pry-remote'
+  gem 'pry-byebug', '3.2.0'
+  gem 'hirb'
+  gem 'awesome_print'
 end
 
 group :development, :test do
