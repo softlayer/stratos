@@ -15,17 +15,12 @@ Deploy like any normal, you know, rails application.
 3. DNS Support
 4. Tickets Interaction
 5. Release 0.1
-6. Ember.js interface
 
 ## Technical Premisses
 
-* Fog SoftLayer
+* (Unofficial) SoftLayer Client
 
-[Fog](http://fog.io) [SoftLayer](http://github.com/fog/fog-softlayer) is a ruby library to talk to SLAPI, it has high level Ruby models, and its the core of this application, if you're a ruby programmer and want to automate some SoftLayer task, we do **really** recommends you to check it!
-
-* Rails Engines
-
-We want to enable users to re-use parts of this rails application into his own development, customizing as he needs, so to make it an easier task, we isolate data manipulation, business rules and frontend into separated engines, so you touch only what you change and run tests on it.
+[SoftLayer](http://github.com/zertico/softlayer) is a (unofficial) ruby library to talk to SLAPI, it has high level Ruby models, and its the core of this application, if you're a ruby programmer and want to automate some SoftLayer task, we do **really** recommends you to check it!
 
 * Twitter bootstrap / Flat UI
 
