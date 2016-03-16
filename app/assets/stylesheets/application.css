@@ -13,3 +13,14 @@
  *= require_tree .
  *= require_self
  */
+
+/* margin for fixed navbar */
+body {
+  min-height: 2000px;
+  padding-top: 70px;
+}
+
+ul.actions {
+  list-style-type: none;
+  padding-left: 0px;
+}

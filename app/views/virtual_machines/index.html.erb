@@ -1,0 +1,18 @@
+Virtual Machines
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Public IP</th>
+      <th>Private IP</th>
+      <th>Start Date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @virtual_machines.each do |vm| %>
+    <%= render partial: 'vm', locals: { vm: vm } %>
+  <% end %>
+  </tbody>
+</table>

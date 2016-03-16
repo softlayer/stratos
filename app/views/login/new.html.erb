@@ -1,0 +1,21 @@
+<div class="container" style="margin-top:30px">
+  <div class="col-md-12">
+    <div class="modal-dialog" style="margin-bottom:0">
+      <div class="modal-content">
+        <div class="panel-heading">
+          <h3 class="panel-title">Sign In</h3>
+        </div>
+        <div class="panel-body">
+          <%= simple_form_for @form, url: new_login_path do |f| %>
+            <fieldset>
+              <%= f.input :api_user, placeholder: 'Your SoftLayer API User', autofocus: true %>
+              <%= f.input :api_key, as: :password, placeholder: 'Your SoftLayer API Key' %>
+              <!-- Change this to a button or input when using this as a form -->
+              <%= f.button :submit, class: 'btn-success', value: 'Login' %>
+            </fieldset>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

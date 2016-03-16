@@ -17,10 +17,7 @@
     <![endif]-->
   </head>
   <body>
-    <div class="container">
-      <%= render partial: 'navbar' %>
-      <%= flash_messages %>
-      <%= yield %>
-    </div>
+    <%= flash_messages %>
+    <%= yield %>
   </body>
 </html>

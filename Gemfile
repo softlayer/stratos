@@ -43,12 +43,13 @@ group :development, :test do
   gem 'spring'
 end
 
-
+gem 'bootstrap-sass', '~> 3.3.6'
 gem 'country_select'
 gem 'devise'
 gem 'softlayer'
 gem 'haml-rails'
 gem 'json'
+gem 'reform'
 gem 'responders'
 gem 'sidekiq'
 gem 'simple_form'

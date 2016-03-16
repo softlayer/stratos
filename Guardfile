@@ -47,6 +47,7 @@ end
 guard 'rails' do
   watch('Gemfile.lock')
   watch(%r{^(config|lib)/.*})
+  ignore(%r{config/routes.rb})
 end
 
 

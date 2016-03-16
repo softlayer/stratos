@@ -41,6 +41,8 @@ GEM
       gyoku (>= 0.4.0)
       nokogiri
     arel (6.0.3)
+    autoprefixer-rails (6.3.4)
+      execjs
     awesome_print (1.6.1)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
@@ -53,6 +55,9 @@ GEM
       rack (>= 0.9.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    bootstrap-sass (3.3.6)
+      autoprefixer-rails (>= 5.2.1)
+      sass (>= 3.3.4)
     builder (3.2.2)
     byebug (5.0.0)
       columnize (= 0.9.0)
@@ -97,6 +102,10 @@ GEM
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
+    disposable (0.2.5)
+      declarative (~> 0.0.4)
+      representable (>= 2.4.0, <= 3.1.0)
+      uber
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
@@ -249,6 +258,10 @@ GEM
     rdoc (4.2.2)
       json (~> 1.4)
     redis (3.2.2)
+    reform (2.1.0)
+      disposable (>= 0.2.2, < 0.3.0)
+      representable (>= 2.4.0, < 3.1.0)
+      uber (~> 0.0.11)
     representable (2.4.1)
       declarative (~> 0.0.5)
       uber (~> 0.0.15)
@@ -371,6 +384,7 @@ DEPENDENCIES
   awesome_print
   better_errors
   binding_of_caller
+  bootstrap-sass (~> 3.3.6)
   byebug
   capybara
   coffee-rails (~> 4.1.0)
@@ -395,6 +409,7 @@ DEPENDENCIES
   pry-remote
   quiet_assets
   rails (= 4.2.6)
+  reform
   responders
   rspec-rails
   sass-rails (~> 5.0)
