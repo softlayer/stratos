@@ -6,15 +6,33 @@ This project is a Ruby on Rails application that offers the possibility to inter
 
 ## Installation
 
-Deploy like any normal, you know, rails application.
+To run on your machine you need to follow the steps below:
+
+* bundle install (to install Ruby dependencies)
+* no need to configure database (we are not persisting any data)
+* rails s
+* Access http://localhost:3000/
+* Login with your API Key
+
+If you'd like to test in a production environment, it's normal rails deployment, set `SECRET_KEY_BASE` variable and run `rake assets:precompile`, that's it!
+
+## Security
+
+Don't worry about logging with your API user and key, because Stratos was develop to avoid data leakage, so we assume some premisses:
+
+* We store your API user and key as a cookie on your browser (vanished when you close your browser)
+* Cookies are signed with rails app key and stored in _encrypted_ form, check this [page](http://api.rubyonrails.org/classes/ActionDispatch/Cookies.html]) for more info on cookies
+* API Key won't be saved on log, as you log, Rails will replace and show `"api_key"=>"[FILTERED]"` on log
+* We connect to SoftLayer API using HTTPS
 
 ## Roadmap
 
-1. Add travis, code climate and inch-ci
-2. Support creation of Cloud and Bare Metal Servers
+1. Support creation of Cloud Servers
+2. Support creation of Hourly Bare Metal
 3. DNS Support
-4. Tickets Interaction
-5. Release 0.1
+4. Support creation of more complex Bare Metal packages
+5. Tickets Interaction
+6. Release 0.1
 
 ## Technical Premisses
 
@@ -22,13 +40,13 @@ Deploy like any normal, you know, rails application.
 
 [SoftLayer](http://github.com/zertico/softlayer) is a (unofficial) ruby library to talk to SLAPI, it has high level Ruby models, and its the core of this application, if you're a ruby programmer and want to automate some SoftLayer task, we do **really** recommends you to check it!
 
-* Twitter bootstrap / Flat UI
+* Twitter bootstrap
 
-Everybody wants a beautiful interface, so why not use [Flat UI](http://designmodo.github.io/Flat-UI/) it makes beautiful using twitter bootstrap, with well designed components.
+Using twitter bootstrap in the simplest possible way, so it makes easir for you to customize the views.
 
 * Trailblazer
 
-As its own description _Trailblazer is a thin layer on top of Rails. It gently enforces encapsulation, an intuitive code structure and gives you an object-oriented architecture._, its perfect to isolate business rules, lets isolate them using Operations!
+As its own description _Trailblazer is a thin layer on top of Rails. It gently enforces encapsulation, an intuitive code structure and gives you an object-oriented architecture._, so it makes easier to create the integration layer between Rails and SoftLayer API once we don't use ActiveRecord/ActiveModel.
 
 ## Contributing
 
