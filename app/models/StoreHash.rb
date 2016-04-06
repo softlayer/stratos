@@ -1,0 +1,2 @@
+class StoreHash
+end

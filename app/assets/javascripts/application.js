@@ -15,3 +15,31 @@
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require_tree .
+
+// $(window).scroll(function(e){
+//   var $el = $('#price_box');
+//   var isPositionFixed = ($el.css('position') == 'fixed');
+//   var priceBoxWidth = $el.width();
+//   if ($(this).scrollTop() > 75 && !isPositionFixed){
+//     $('#price_box').css({'position': 'fixed', 'top': '63px' });
+//     $('#price_box').width(priceBoxWidth);
+//   }
+//   if ($(this).scrollTop() < 75 && isPositionFixed)
+//   {
+//     $('#price_box').css({'position': 'static', 'top': '0px'});
+//     $('#price_box').width('100%');
+//   }
+// });
+
+$(document).on('click', '.panel-heading span.clickable', function(e){
+    var $this = $(this);
+	if(!$this.hasClass('panel-collapsed')) {
+		$this.parents('.panel').find('.panel-body').slideUp();
+		$this.addClass('panel-collapsed');
+		$this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		$this.parents('.panel').find('.panel-body').slideDown();
+		$this.removeClass('panel-collapsed');
+		$this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})

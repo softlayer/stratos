@@ -44,15 +44,14 @@ group :development, :test do
 end
 
 gem 'bootstrap-sass', '~> 3.3.6'
-gem 'country_select'
-gem 'devise'
-gem 'softlayer'
-gem 'haml-rails'
-gem 'json'
-gem 'reform'
-gem 'responders'
-gem 'sidekiq'
-gem 'simple_form'
+gem 'country_select', '~> 2.5'
+gem 'devise', '~> 3.5'
+gem 'softlayer', '~> 0.0'
+gem 'json', '~> 1.8'
+gem 'reform', '~> 2.1'
+gem 'responders', '~> 2.1'
+gem 'sidekiq', '~> 4.1'
+gem 'simple_form', '~> 3.2'
 
 group :development do
   gem 'better_errors'
