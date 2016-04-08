@@ -4,6 +4,10 @@ class StoreHash::Region
     generate_dcs_groups_hash
   end
 
+  def datacenter_with_id(datacenter_id)
+    datacenters.select { |x| x.id == datacenter_id }.first
+  end
+
   def datacenters_for(group_id)
     @dcs_groups_hash[group_id]
   end
@@ -12,11 +16,17 @@ class StoreHash::Region
     @dcs_hash.keys - datacenters_for(group_id)
   end
 
-  private
-    def datacenters
-      @dcs ||= Softlayer::Location::Datacenter.mask('mask[groups]').get_datacenters
+  def datacenters
+    Rails.cache.fetch("softlayer/datacenters", expires_in: 12.hours) do
+      Softlayer::Location::Datacenter.mask('mask[groups]').get_datacenters
     end
+  end
 
+  def datacenters_ids
+    @dcs_hash.keys
+  end
+
+  private
     def generate_dcs_hash
       @dcs_hash = {}
       datacenters.each do |dc|

@@ -79,12 +79,6 @@
   <%= f.button :submit, class: 'btn-success' %>
 <% end %>
 
-
-<!--
-
-  # storage addons
-  attr_accessor :evault
-
-  # service addons
-  attr_accessor :monitoring, :response, :bc_insurance
--->
+<script>
+var conflictHash = <%= @conflict_hash.html_safe %> 
+</script>

@@ -4,10 +4,9 @@ class VirtualMachinesController < ApplicationController
   end
 
   def new
-    Rails.cache.write("softlayer/datacenters", Softlayer::Location::Datacenter.mask('mask[groups]').get_datacenters, expires_in: 12.hours)
-
     @vm = VirtualMachine.new
     @form = VirtualMachineForm.new(@vm)
+    @conflict_hash = StoreHash.generate_hash.camelize_keys.to_json
   end
 
   def create

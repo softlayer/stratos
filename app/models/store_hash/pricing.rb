@@ -12,14 +12,15 @@ class StoreHash::Pricing
     @prices_item_hash[price_id]
   end
 
-  private
-    def items
-      return @items if @items
+  def items
+    Rails.cache.fetch("softlayer/package-46-items", expires_in: 12.hours) do
       package = Softlayer::Product::Package.find(46)
       items_mask = 'mask[conflictCount,conflicts,globalCategoryConflictCount,globalCategoryConflicts,locationConflictCount,locationConflicts,prices[pricingLocationGroup]]'
-      @items = package.mask(items_mask).get_items
+      package.mask(items_mask).get_items
     end
+  end
 
+  private
     def generate_prices_hash
       @prices_hash = {}
       items.each do |item|
