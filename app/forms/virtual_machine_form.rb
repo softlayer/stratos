@@ -1,6 +1,7 @@
 class VirtualMachineForm < Reform::Form
   property :hostname
   property :domain
+  property :hourly
   property :datacenter
   property :guest_core
   property :ram
@@ -11,7 +12,6 @@ class VirtualMachineForm < Reform::Form
   property :guest_disk3
   property :guest_disk4
   property :bandwidth
-  property :port_speed
   property :port_speed
   property :sec_ip_addresses
   property :pri_ipv6_addresses
@@ -31,9 +31,14 @@ class VirtualMachineForm < Reform::Form
 
   validates :hostname, presence: true
   validates :domain, presence: true
-  validates :datacenter, presence: true
-  validates :processor, presence: true
-  validates :memory, presence: true
-  validates :operating_system, presence: true
-  validates :network, presence: true
+  validates :hourly, presence: true
+  validates :datacenter, presence: true, numericality: { only_integer: true }
+  validates :guest_core, presence: true, numericality: { only_integer: true }
+  validates :ram, presence: true, numericality: { only_integer: true }
+  validates :os, presence: true, numericality: { only_integer: true }
+  validates :guest_disk0, presence: true, numericality: { only_integer: true }
+  validates :bandwidth, presence: true, numericality: { only_integer: true }
+  validates :port_speed, presence: true, numericality: { only_integer: true }
+  validates :monitoring, presence: true, numericality: { only_integer: true }
+  validates :response, presence: true, numericality: { only_integer: true }
 end

@@ -4,7 +4,7 @@ class StoreHash
   def self.generate_hash
     Rails.cache.fetch("softlayer/package-46-conflict-hash", expires_in: 12.hours) do
       sh = self.new
-      sh.conflict_hash
+      sh.conflict_hash.camelize_keys.to_json
     end
   end
 
@@ -24,6 +24,7 @@ class StoreHash
         process_item_conflicts(item) if item.conflict_count != "0"
         process_location_conflicts(item) if item.location_conflict_count != "0"
         process_price_location_conflicts(item)
+        process_capacity_conflicts(item)
       end
       hash
     end
@@ -62,15 +63,42 @@ class StoreHash
 
       # handle non base prices
       non_base_prices = item.prices.select { |x| x.location_group_id != nil }
+      default_price = item.prices.select { |x| x.location_group_id.nil? }.first
+
       non_base_prices.each do |price|
         dcs_conflicts = region.datacenters_conflicts_for price.location_group_id
         dcs_conflicts.each { |x| conflict_hash[:location_to_price][x] << price.id }
-        dcs_ids = dcs_ids - dcs_conflicts
+        dcs_conflicts.each do |x|
+          # do not add for non dependant datacenters
+          conflict_hash[:location_to_price][x] << default_price.id if region.standard?(x)
+        end
       end
+    end
 
-      # add conflicts for default prices
-      base_price = item.prices.select { |x| x.location_group_id.nil? }.first
-      dcs_ids.each { |x| conflict_hash[:location_to_price][x] << base_price.id }
+    def process_capacity_conflicts(item)
+      item.prices.each do |price|
+        unless price.capacity_restriction_type.nil?
+          capacity_restriction_type = price.capacity_restriction_type
+          capacity_restriction_type = "(CORE|PRIVATE_CORE)" if price.capacity_restriction_type == "CORE"
+          # get restricted based on unit
+          restricted = items.select { |x| x.units.match capacity_restriction_type unless x.units.nil? }
+          # filter based on provided
+          items_to_remove = restricted.select do |x|
+            x.capacity.to_i > price.capacity_restriction_maximum.to_i or
+            x.capacity.to_i < price.capacity_restriction_minimum.to_i
+          end
+
+          prices_to_remove = []
+          items_to_remove.each do |item|
+            prices_to_remove.concat item.prices.map { |x| x.id }
+          end
+
+          prices_to_remove.each do |priceconf|
+            conflict_hash[:price_to_price][priceconf] = [] if conflict_hash[:price_to_price][priceconf].nil?
+            conflict_hash[:price_to_price][priceconf] << price.id
+          end
+        end
+      end
     end
 
     def items

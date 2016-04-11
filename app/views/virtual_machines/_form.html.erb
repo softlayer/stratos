@@ -4,11 +4,20 @@
   <%= f.input :domain %>
   <div class="panel panel-default">
     <div class="panel-heading">
+      <h3 class="panel-title">Hourly</h3>
+      <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+    </div>
+    <div class="panel-body">
+      <%= f.input :hourly, label: "Hourly Instance", as: :boolean %>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
       <h3 class="panel-title">Location</h3>
       <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
     </div>
     <div class="panel-body">
-      <%= f.input :datacenter, label: "Data Center", collection: @form.model.options_for_datacenter, include_blank: false %>
+      <%= f.input :datacenter, label: "Data Center", collection: @form.model.options_for_datacenter, include_blank: true, input_html: { data: { 'resource': "datacenter" }} %>
     </div>
   </div>
   <div class="panel panel-default">
@@ -17,10 +26,10 @@
       <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
     </div>
     <div class="panel-body">
-      <%= f.input :guest_core, label: 'Computing Instance', collection: @form.model.form_options_for('guest_core'), as: :grouped_select, group_method: :last %>
-      <%= f.input :ram, label: 'RAM', collection: @form.model.form_options_for('ram') %>
+      <%= f.input :guest_core, label: 'Computing Instance', collection: @form.model.form_options_for('guest_core'), as: :grouped_select, group_method: :last, include_blank: false %>
+      <%= f.input :ram, label: 'RAM', collection: @form.model.form_options_for('ram'), include_blank: false %>
       <%= f.input :os, label: 'Operating System', collection: @form.model.form_options_for('os'), as: :grouped_select, group_method: :last %>
-      <%= f.input :guest_disk0, label: 'First Disk', collection: @form.model.form_options_for('guest_disk0'), as: :grouped_select, group_method: :last %>
+      <%= f.input :guest_disk0, label: 'First Disk', collection: @form.model.form_options_for('guest_disk0'), as: :grouped_select, group_method: :last, include_blank: false %>
       <%= f.input :guest_disk1, label: 'Second Disk', collection: @form.model.form_options_for('guest_disk1'), as: :grouped_select, group_method: :last %>
       <%= f.input :guest_disk2, label: 'Third Disk', collection: @form.model.form_options_for('guest_disk2'), as: :grouped_select, group_method: :last %>
       <%= f.input :guest_disk3, label: 'Fourth Disk', collection: @form.model.form_options_for('guest_disk3'), as: :grouped_select, group_method: :last %>
@@ -33,8 +42,8 @@
       <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
     </div>
     <div class="panel-body">
-      <%= f.input :bandwidth, label: 'Public Bandwidth', collection: @form.model.form_options_for('bandwidth'), as: :grouped_select, group_method: :last %>
-      <%= f.input :port_speed, label: 'Uplink Port Speeds', collection: @form.model.form_options_for('port_speed'), as: :grouped_select, group_method: :last %>
+      <%= f.input :bandwidth, label: 'Public Bandwidth', collection: @form.model.form_options_for('bandwidth'), as: :grouped_select, group_method: :last, include_blank: false %>
+      <%= f.input :port_speed, label: 'Uplink Port Speeds', collection: @form.model.form_options_for('port_speed'), as: :grouped_select, group_method: :last, include_blank: false %>
       <%= f.input :sec_ip_addresses, label: 'Public Secondary IP Addresses', collection: @form.model.form_options_for('sec_ip_addresses') %>
       <%= f.input :pri_ipv6_addresses, label: 'Primary IPv6 Addresses', collection: @form.model.form_options_for('pri_ipv6_addresses') %>
       <%= f.input :static_ipv6_addresses, label: 'Public Static IPv6 Addresses', collection: @form.model.form_options_for('static_ipv6_addresses') %>
@@ -71,8 +80,8 @@
       <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
     </div>
     <div class="panel-body">
-      <%= f.input :monitoring, label: 'Monitoring', collection: @form.model.form_options_for('monitoring') %>
-      <%= f.input :response, label: 'Response', collection: @form.model.form_options_for('response') %>
+      <%= f.input :monitoring, label: 'Monitoring', collection: @form.model.form_options_for('monitoring'), include_blank: false %>
+      <%= f.input :response, label: 'Response', collection: @form.model.form_options_for('response'), include_blank: false %>
       <%= f.input :bc_insurance, label: 'Insurance', collection: @form.model.form_options_for('bc_insurance') %>
     </div>
   </div>

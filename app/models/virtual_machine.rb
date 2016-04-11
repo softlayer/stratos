@@ -1,6 +1,6 @@
 class VirtualMachine
   include ActiveModel::Model
-  attr_accessor :hostname, :domain, :datacenter
+  attr_accessor :hostname, :domain, :hourly, :datacenter
 
   # system configuration
   attr_accessor :guest_core, :ram, :os, :guest_disk0, :guest_disk1, :guest_disk2, :guest_disk3, :guest_disk4
@@ -28,6 +28,15 @@ class VirtualMachine
     Softlayer::Account.get_virtual_guests
   end
 
+  def self.warm_cache
+    vm = self.new
+    vm.send(:datacenters)
+    vm.send(:create_options)
+    vm.send(:package)
+    vm.send(:configuration)
+    vm.send(:product_categories)
+  end
+
   def categories
     product_categories.map { |x| x.category_code }
   end
@@ -36,51 +45,114 @@ class VirtualMachine
     product_categories.select { |x| x.category_code == category }.first.groups.map { |x| x.title }
   end
 
-  def options_for(category, group)
-    category = product_categories.select { |x| x.category_code == category }.first
-    group = category.groups.select { |x| x.title == group }.first
-    group.prices.map { |x| [x.item.description, x.item.id] }.uniq
-  end
-
   def options_for_datacenter
-    datacenters.map { |x| [x.long_name, x.name] }
+    datacenters.map { |x| [x.long_name, x.id, {
+      'data-standard-prices-flag': x.groups.select { |x| x.location_group_type_id == 82 && x.id = 1 }.empty? ? 1 : 0,
+      'data-datacenter-id': x.id
+    }] }
   end
 
   def form_options_for(category)
-    array = []
-    return options_for(category, nil) if groups_for(category)[0] == nil
-    product_categories.select { |x| x.category_code == category }.each do |category|
-      category.groups.each do |group|
-        options = group.prices.map { |x| [x.item.description, x.item.id] }.uniq
-        array << [group.title, options]
+    Rails.cache.fetch("softlayer/46-form-options-for-#{category}", expires_in: 12.hours) do
+      array = []
+      return options_for(category, nil) if groups_for(category)[0] == nil
+      product_categories.select { |x| x.category_code == category }.each do |category|
+        category.groups.each do |group|
+          options = group.prices.map { |x| [x.item.description, x.id, {
+            'data-location-dependent-flag': (x.location_group_id.nil? ? 0 : 1),
+            'data-item-id': x.item.id,
+            'data-recurringfee': (x.recurring_fee || nil),
+            'data-nonrecurringfee': "0",
+            'data-hourlyfee': (x.hourly_recurring_fee || nil),
+            'data-ispriceflag': "1",
+            'data-item-description': x.item.description
+          }] }
+          array << [group.title, options]
+        end
+      end
+      array
+    end
+  end
+
+  def default_options
+    default_items = product_categories.map do |preset|
+      config = preset.preset_configurations
+      if config.is_a? Array
+        config.first.price.id
+      else
+        config.price.id unless config.price.nil?
       end
     end
-    array
+    default_items.compact!.concat [1640, 1644, 273]
   end
 
   def components_price
+    pricing = StoreHash::Pricing.new
     prices = {}
-    ids = location_ids_for(datacenter)
+    prices[:total] = {hourly_fee: BigDecimal.new('0.0'), monthly_fee: BigDecimal.new('0.0')}
+    prices[:components] = {}
+    # process the datacenter
+    unless datacenter.blank?
+      location = datacenters.select { |x| x.id == datacenter.to_i }.first
+      prices[:datacenter] = {
+        name: "Data Center",
+        item: location.name.upcase
+      }
+    end
+
+    # process each component
     components.each do |component|
-      prices = product_categories
-      price_for_dc = guest_disk0_san.select { |x| x.item.description == option && ids.include?(x.location_group_id) }
-      if price_for_dc.empty?
-        price = guest_disk0_san.select { |x| x.item.description == option && ids.location_group_id.nil? }
-      else
-        price = default_price
+      category = product_categories.select { |x| x.category_code == component.to_s }.first
+      price_id = self.send(component).to_i
+      item_id = pricing.item_for(price_id).try(:first)
+      if item_id
+        item = pricing.items.select { |x| x.id == item_id }.try(:first)
+        price = item.prices.select { |x| x.id == price_id }.try(:first)
+        prices[:components][component] = {
+          name: category.name,
+          item: item.description,
+          hourly_fee: price.hourly_recurring_fee,
+          monthly_fee: price.recurring_fee
+        }
+        prices[:total][:hourly_fee] += BigDecimal.new(price.hourly_recurring_fee.to_s)
+        prices[:total][:monthly_fee] += BigDecimal.new(price.recurring_fee.to_s)
       end
     end
+    puts prices.inspect
+    prices
   end
 
-  # disk 1 is reserved for swap
-  # disks = options_for_block_devices(1, true)
-  # disks.first { |x| x.item_price.item.description == "10 GB (SAN)" }.template
-  def options_for_block_devices(disk = 0, local = false)
-    disks = create_options.block_devices.select { |x| x.template.block_devices.first.device == disk.to_s && x.template.local_disk_flag == local }
-    disks.map { |x| [x.item_price.item.description, x.item_price.item.description] }
+  def template_hash
+    template = {}
+    template['location'] = datacenter
+    template['packageId'] = 46
+    template['quantity'] = 1
+    template['useHourlyPricing'] = !!hourly
+    template['virtualGuests'] = [{domain: domain, hostname: hostname}]
+    template['prices'] = []
+    components.each do |component|
+      price_id = self.send(component).to_i
+      template['prices'] << {id: price_id} if price_id != 0
+    end
+    template['prices'].concat [{"id"=>21}, {"id"=>57}, {"id"=>420}, {"id"=>418}, {"id"=>905}]
+    template
   end
 
   private
+    def options_for(category, group)
+      category = product_categories.select { |x| x.category_code == category }.first
+      group = category.groups.select { |x| x.title == group }.first
+      group.prices.map { |x| [x.item.description, x.id, {
+        'data-location-dependent-flag': (x.location_group_id.nil? ? 0 : 1),
+        'data-item-id': x.item.id,
+        'data-recurringfee': x.recurring_fee,
+        'data-nonrecurringfee': "0",
+        'data-hourlyfee': (x.hourly_recurring_fee || 0),
+        'data-ispriceflag': "1",
+        'data-item-description': x.item.description
+      }] }
+    end
+
     def components
       [:guest_core, :ram, :os, :guest_disk0, :guest_disk1, :guest_disk2, :guest_disk3, :guest_disk4, :bandwidth, :port_speed, :sec_ip_addresses, :pri_ipv6_addresses, :static_ipv6_addresses, :os_addon, :cdp_backup, :control_panel, :database, :firewall, :av_spyware_protection, :intrusion_protection, :monitoring_package ,:evault, :monitoring, :response, :bc_insurance]
     end

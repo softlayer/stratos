@@ -4,6 +4,12 @@ class StoreHash::Region
     generate_dcs_groups_hash
   end
 
+  def standard?(datacenter_id)
+    dc = datacenters.select { |x| x.id == datacenter_id }.first
+    return false if dc.groups.select { |x| x.location_group_type_id == 82 && x.id = 1 }.empty?
+    true
+  end
+
   def datacenter_with_id(datacenter_id)
     datacenters.select { |x| x.id == datacenter_id }.first
   end

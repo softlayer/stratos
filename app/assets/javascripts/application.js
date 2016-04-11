@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require paloma
 //= require bootstrap-sprockets
 //= require_tree .
 
@@ -43,3 +44,17 @@ $(document).on('click', '.panel-heading span.clickable', function(e){
 		$this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
 	}
 })
+
+var initializePaloma = function() {
+  Paloma.start();
+}
+
+$(document).on('page:load', function(){
+  if ($('.js-paloma-hook').data('id') != parseInt(Paloma.engine._request.id)) {
+    initializePaloma();
+  }
+});
+
+$(document).ready(function(){
+  initializePaloma();
+});
