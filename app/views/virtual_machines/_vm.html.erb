@@ -2,7 +2,7 @@
   <td><%= vm.fully_qualified_domain_name %></td>
   <td><%= vm.primary_ip_address %></td>
   <td><%= vm.primary_backend_ip_address %></td>
-  <td><%= vm.provision_date.to_date %></td>
+  <td><%= vm.provision_date.nil? ? '-' : vm.provision_date.to_date %></td>
   <td>
     <ul class="actions">
       <li class="dropdown">

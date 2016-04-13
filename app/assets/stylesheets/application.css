@@ -16,11 +16,51 @@
 
 /* margin for fixed navbar */
 body {
-  min-height: 2000px;
   padding-top: 70px;
+  padding-bottom: 100px;
 }
 
 ul.actions {
   list-style-type: none;
   padding-left: 0px;
+}
+
+.fixedElement {
+    background-color: #c0c0c0;
+    position:fixed;
+    top:0;
+    width:100%;
+    z-index:100;
+}
+
+.panel-heading span {
+	margin-top: -20px;
+	font-size: 15px;
+}
+
+.summary-total-container {
+    padding: 10px;
+    border: 1px solid #d1d3d4;
+    border-radius: 5px;
+    background-color: #f1f2f2;
+    margin: 10px 0;
+}
+
+p.total-price {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: bold;
+    margin-bottom: 10px;
+    height: 20px;
+}
+
+p.total-fees {
+    font-size: 12px;
+}
+
+div.summary-item {
+    padding: 5px 0;
+    font-size: 12px;
+    min-height: 20px;
+    border-bottom: 1px solid #d1d3d4;
 }

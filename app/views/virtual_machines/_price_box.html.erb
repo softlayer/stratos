@@ -1,0 +1,46 @@
+<div id="price_box">
+  <div class="summary-total-container">
+    <p class="total-price"><span id="totals-monthly" class="amount"><%= number_to_currency(@prices[:total][:monthly_fee]) %></span>/<span class="recurring-legend">mo.</span></p>
+    <p class="total-price"><span id="totals-hourly" class="amount"><%= number_to_currency(@prices[:total][:hourly_fee]) %></span>/<span class="recurring-legend">ho.</span></p>
+    <p class="total-fees">+ <span id="totals-setup" class="amount">$0.00</span> in one-time fees</p>
+    <div id="totals-quantity" class="hide">1</div>
+    <div class="clearfix"></div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Configuration</h3>
+    </div>
+    <div class="panel-body">
+      <% if @prices.has_key? :datacenter %>
+      <div class="summary-item" data-categorycode="datacenter">
+        <div class="category-name pull-left">
+          <a href="#virtual_machine_datacenter">Data Center</a>
+        </div>
+        <div class="clearfix"></div>
+        <dl>
+          <dt class="item-name pull-left full-width" id="summary-item-datacenter"><%= @prices[:datacenter][:item] %></dt>
+          <dd data-recurringfee="" data-nonrecurringfee="" class="item-price pull-right">
+          </dd>
+        </dl>
+        <div class="clearfix"></div>
+      </div>
+      <% end %>
+      <% @prices[:components].each_pair do |k, v| %>
+      <div class="summary-item" data-categorycode="<%= k %>">
+        <div class="category-name pull-left">
+          <a href="#virtual_machine_<%= k %>"><%= v[:name] %></a>
+        </div>
+        <div class="clearfix"></div>
+        <dl>
+          <dt class="item-name pull-left" id="summary-item-<%= k %>"><%= v[:item] %></dt>
+          <dd data-recurringfee="" data-nonrecurringfee="" class="item-price pull-right">
+            <span id="summary-amount-<%= k %>" class="populate recurring"><%= number_to_currency(v[:monthly_fee]) %></span>/mo.
+          </dd>
+        </dl>
+        <div class="clearfix"></div>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>

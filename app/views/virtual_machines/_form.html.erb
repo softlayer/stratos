@@ -1,0 +1,93 @@
+<%= simple_form_for(@form) do |f| %>
+  <%= f.error_notification %>
+  <%= f.input :hostname %>
+  <%= f.input :domain %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Hourly</h3>
+      <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+    </div>
+    <div class="panel-body">
+      <%= f.input :hourly, label: "Hourly Instance", as: :boolean %>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Location</h3>
+      <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+    </div>
+    <div class="panel-body">
+      <%= f.input :datacenter, label: "Data Center", collection: @form.model.options_for_datacenter, include_blank: true, input_html: { data: { 'resource': "datacenter" }} %>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">System Configuration</h3>
+      <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+    </div>
+    <div class="panel-body">
+      <%= f.input :guest_core, label: 'Computing Instance', collection: @form.model.form_options_for('guest_core'), as: :grouped_select, group_method: :last, include_blank: false %>
+      <%= f.input :ram, label: 'RAM', collection: @form.model.form_options_for('ram'), include_blank: false %>
+      <%= f.input :os, label: 'Operating System', collection: @form.model.form_options_for('os'), as: :grouped_select, group_method: :last %>
+      <%= f.input :guest_disk0, label: 'First Disk', collection: @form.model.form_options_for('guest_disk0'), as: :grouped_select, group_method: :last, include_blank: false %>
+      <%= f.input :guest_disk1, label: 'Second Disk', collection: @form.model.form_options_for('guest_disk1'), as: :grouped_select, group_method: :last %>
+      <%= f.input :guest_disk2, label: 'Third Disk', collection: @form.model.form_options_for('guest_disk2'), as: :grouped_select, group_method: :last %>
+      <%= f.input :guest_disk3, label: 'Fourth Disk', collection: @form.model.form_options_for('guest_disk3'), as: :grouped_select, group_method: :last %>
+      <%= f.input :guest_disk4, label: 'Fifth Disk', collection: @form.model.form_options_for('guest_disk4'), as: :grouped_select, group_method: :last %>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Network Options</h3>
+      <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+    </div>
+    <div class="panel-body">
+      <%= f.input :bandwidth, label: 'Public Bandwidth', collection: @form.model.form_options_for('bandwidth'), as: :grouped_select, group_method: :last, include_blank: false %>
+      <%= f.input :port_speed, label: 'Uplink Port Speeds', collection: @form.model.form_options_for('port_speed'), as: :grouped_select, group_method: :last, include_blank: false %>
+      <%= f.input :sec_ip_addresses, label: 'Public Secondary IP Addresses', collection: @form.model.form_options_for('sec_ip_addresses') %>
+      <%= f.input :pri_ipv6_addresses, label: 'Primary IPv6 Addresses', collection: @form.model.form_options_for('pri_ipv6_addresses') %>
+      <%= f.input :static_ipv6_addresses, label: 'Public Static IPv6 Addresses', collection: @form.model.form_options_for('static_ipv6_addresses') %>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">System Addons</h3>
+      <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+    </div>
+    <div class="panel-body">
+      <%= f.input :os_addon, label: 'OS-Specific Addon', collection: @form.model.form_options_for('os_addon'), as: :grouped_select, group_method: :last %>
+      <%= f.input :cdp_backup, label: 'CDP Addon', collection: @form.model.form_options_for('cdp_backup') %>
+      <%= f.input :control_panel, label: 'Control Panel Software', collection: @form.model.form_options_for('control_panel'), as: :grouped_select, group_method: :last %>
+      <%= f.input :database, label: 'Database Software', collection: @form.model.form_options_for('database'), as: :grouped_select, group_method: :last %>
+      <%= f.input :firewall, label: 'Hardware & Software Firewalls', collection: @form.model.form_options_for('firewall'), as: :grouped_select, group_method: :last %>
+      <%= f.input :av_spyware_protection, label: 'Anti-Virus & Spyware Protection', collection: @form.model.form_options_for('av_spyware_protection') %>
+      <%= f.input :intrusion_protection, label: 'Intrusion Detection & Protection', collection: @form.model.form_options_for('intrusion_protection') %>
+      <%= f.input :monitoring_package, label: 'Advanced Monitoring', collection: @form.model.form_options_for('monitoring_package') %>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Storage Addons</h3>
+      <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+    </div>
+    <div class="panel-body">
+      <%= f.input :evault, label: 'EVault', collection: @form.model.form_options_for('evault') %>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Service Addons</h3>
+      <span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-up"></i></span>
+    </div>
+    <div class="panel-body">
+      <%= f.input :monitoring, label: 'Monitoring', collection: @form.model.form_options_for('monitoring'), include_blank: false %>
+      <%= f.input :response, label: 'Response', collection: @form.model.form_options_for('response'), include_blank: false %>
+      <%= f.input :bc_insurance, label: 'Insurance', collection: @form.model.form_options_for('bc_insurance') %>
+    </div>
+  </div>
+  <%= f.button :submit, class: 'btn-success' %>
+<% end %>
+
+<script>
+var conflictHash = <%= @conflict_hash.html_safe %> 
+</script>
