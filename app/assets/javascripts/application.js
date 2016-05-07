@@ -17,21 +17,6 @@
 //= require bootstrap-sprockets
 //= require_tree .
 
-// $(window).scroll(function(e){
-//   var $el = $('#price_box');
-//   var isPositionFixed = ($el.css('position') == 'fixed');
-//   var priceBoxWidth = $el.width();
-//   if ($(this).scrollTop() > 75 && !isPositionFixed){
-//     $('#price_box').css({'position': 'fixed', 'top': '63px' });
-//     $('#price_box').width(priceBoxWidth);
-//   }
-//   if ($(this).scrollTop() < 75 && isPositionFixed)
-//   {
-//     $('#price_box').css({'position': 'static', 'top': '0px'});
-//     $('#price_box').width('100%');
-//   }
-// });
-
 $(document).on('click', '.panel-heading span.clickable', function(e){
     var $this = $(this);
 	if(!$this.hasClass('panel-collapsed')) {
@@ -49,13 +34,7 @@ var initializePaloma = function() {
   Paloma.start();
 }
 
-$(document).on('page:load', function(){
-  if ($('.js-paloma-hook').data('id') != parseInt(Paloma.engine._request.id)) {
-    initializePaloma();
-  }
-});
-
-$(document).ready(function(){
+$(document).on('turbolinks:load', function(){
   initializePaloma();
 });
 
@@ -65,10 +44,24 @@ $(document).on('ajax:send', function(event, xhr){
   var progressType = link.data('loading-progress-type');
   if (message === undefined) { message = "Loading" };
   if (progressType === undefined) { progressType = "success" };
-  console.log(progressType);
   waitingDialog.show(message, { progressType: progressType });
 });
 
 $(document).on('ajax:complete', function(event, xhr, status){
   waitingDialog.hide();
 });
+
+
+document.addEventListener("turbolinks:click", function(event) {
+  var $target = $(event.target);
+  var loading_message = $target.data('loading-message');
+  if (loading_message !== undefined) {
+    var progressType = $target.data('loading-progress-type');
+    if (progressType === undefined) { progressType = "success" };
+    waitingDialog.show(loading_message, { progressType: progressType });
+  }
+})
+
+document.addEventListener("turbolinks:before-cache", function(event) {
+  waitingDialog.hide();
+})
