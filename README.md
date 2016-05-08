@@ -23,6 +23,7 @@ Don't worry about logging with your API user and key, because Stratos was develo
 * We store your API user and key as a cookie on your browser (vanished when you close your browser)
 * Cookies are signed with rails app key and stored in _encrypted_ form, check this [page](http://api.rubyonrails.org/classes/ActionDispatch/Cookies.html]) for more info on cookies
 * API Key won't be saved on log, as you log, Rails will replace and show `"api_key"=>"[FILTERED]"` on log
+* Disabled logging on Jobs that receive api user / key to process API info on background.
 * We connect to SoftLayer API using HTTPS
 
 ## Roadmap
