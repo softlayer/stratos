@@ -58,3 +58,17 @@ $(document).on('page:load', function(){
 $(document).ready(function(){
   initializePaloma();
 });
+
+$(document).on('ajax:send', function(event, xhr){
+  var link = $(event.target);
+  var message = link.data('loading-message');
+  var progressType = link.data('loading-progress-type');
+  if (message === undefined) { message = "Loading" };
+  if (progressType === undefined) { progressType = "success" };
+  console.log(progressType);
+  waitingDialog.show(message, { progressType: progressType });
+});
+
+$(document).on('ajax:complete', function(event, xhr, status){
+  waitingDialog.hide();
+});

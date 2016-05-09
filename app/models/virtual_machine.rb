@@ -1,5 +1,7 @@
 class VirtualMachine
   include ActiveModel::Model
+  attr_reader :id
+
   attr_accessor :hostname, :domain, :hourly, :datacenter
 
   # system configuration
@@ -24,8 +26,18 @@ class VirtualMachine
   # other
   attr_accessor :new_customer_setup, :premium, :managed_resource, :storage_backend_upgrade, :evault_plugin, :web_analytics
 
+  delegate :fully_qualified_domain_name, :power_on, :power_off, :primary_ip_address, to: :softlayer_object
+  delegate :primary_backend_ip_address, :provision_date, to: :softlayer_object
+
   def self.all
-    Softlayer::Account.get_virtual_guests
+    objects = Softlayer::Account.mask('mask[powerState,status,activeTransactionCount,activeTransactions]').get_virtual_guests
+    objects.map { |softlayer_object| self.build_from_softlayer_object(softlayer_object) }
+  end
+
+  def self.find(id)
+    vm = self.new
+    vm.softlayer_object = Softlayer::Virtual::Guest.mask('mask[powerState,status,activeTransactionCount,activeTransactions]').find(id)
+    vm
   end
 
   def self.warm_cache
@@ -35,6 +47,13 @@ class VirtualMachine
     vm.send(:package)
     vm.send(:configuration)
     vm.send(:product_categories)
+  end
+
+  def self.build_from_softlayer_object(softlayer_object)
+    vm = self.new
+    vm.instance_variable_set(:@softlayer_object, softlayer_object)
+    vm.instance_variable_set(:@id, softlayer_object.id)
+    vm
   end
 
   def categories
@@ -138,7 +157,44 @@ class VirtualMachine
     template
   end
 
+  def softlayer_object=(object)
+    @softlayer_object = object
+  end
+
+  def reboot
+    softlayer_object.reboot_hard
+  end
+
+  def power_state
+    softlayer_object.power_state.key_name
+  end
+
+  def status
+    softlayer_object.status.key_name
+  end
+
+  def destroy
+    softlayer_object.delete_object
+    self.freeze
+  end
+  
+  def running?
+    return true if power_state == "RUNNING"
+    false
+  end
+
+  def active?
+    return false unless softlayer_object.active_transaction_count == "0"
+    return false if provision_date.nil?
+    return true if status == "ACTIVE"
+    false
+  end
+
   private
+    def softlayer_object
+      @softlayer_object
+    end
+
     def options_for(category, group)
       category = product_categories.select { |x| x.category_code == category }.first
       group = category.groups.select { |x| x.title == group }.first

@@ -36,4 +36,38 @@ class VirtualMachinesController < ApplicationController
       format.js { render action: "price_box" }
     end
   end
+
+  def reboot
+    vm = VirtualMachine.find(params[:id])
+    vm.reboot
+
+    respond_to do |format|
+      format.js { render }
+    end
+  end
+
+  def power_cycle
+    vm = VirtualMachine.find(params[:id])
+
+    if vm.running?
+      vm.power_off
+      @notice = "Machine turned off"
+    elsif
+      vm.power_on
+      @notice = "Machine turned on"
+    end
+
+    respond_to do |format|
+      format.js { render }
+    end
+  end
+
+  def destroy
+    vm = VirtualMachine.find(params[:id])
+    vm.destroy
+
+    respond_to do |format|
+      format.js { render }
+    end
+  end
 end
