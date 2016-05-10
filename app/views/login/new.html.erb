@@ -11,9 +11,11 @@
               <%= f.input :api_user, placeholder: 'Your SoftLayer API User', autofocus: true %>
               <%= f.input :api_key, as: :password, placeholder: 'Your SoftLayer API Key' %>
               <!-- Change this to a button or input when using this as a form -->
-              <%= f.button :submit, class: 'btn-success', value: 'Login' %>
+              <center><%= f.button :submit, class: 'btn-success btn-block', value: 'Login' %></center>
             </fieldset>
           <% end %>
+          <br />
+          <div class="alert alert-warning" role="alert"><strong>Attention!</strong> First time you login, Stratos will process some information from SoftLayer API (<b>no</b> sensitive data!) and store as cache, so don't worry if your login take a little while.</div>
         </div>
       </div>
     </div>

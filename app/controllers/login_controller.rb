@@ -15,6 +15,8 @@ class LoginController < ApplicationController
       if connection.valid?
         cookies.signed[:api_user] = api_user
         cookies.signed[:api_key] = api_key
+        WarmCacheJob.logger = nil
+        WarmCacheJob.perform_later(api_user, api_key)
         redirect_to root_path, notice: "Logged In Successfully"
       else
         redirect_to login_path, alert: "Invalid Credentials"

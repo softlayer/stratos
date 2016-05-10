@@ -6,6 +6,10 @@ Rails.application.routes.draw do
     collection do
       post :price_box
     end
+    member do
+      get :reboot
+      get :power_cycle
+    end
   end
   root to: 'virtual_machines#index'
 end

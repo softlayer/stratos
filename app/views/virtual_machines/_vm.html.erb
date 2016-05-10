@@ -5,18 +5,20 @@
   <td><%= vm.provision_date.nil? ? '-' : vm.provision_date.to_date %></td>
   <td>
     <ul class="actions">
+      <% if vm.active? %>
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Actions <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="#">Reboot</a></li>
-          <li><a href="#">Power On/Off</a></li>
+          <li><%= link_to "Reboot", reboot_virtual_machine_path(vm.id), remote: true, data: { loading_message: 'Rebooting Server' } %></li>
+          <li><%= link_to "Power On/Off", power_cycle_virtual_machine_path(vm.id), remote: true, data: { loading_message: 'Power Cycling Server' } %></li>
           <li><a href="#">Rename Instance</a></li>
           <li><a href="#">View Audit Logs</a></li>
           <li><a href="#">Upgrade / Downgrade</a></li>
           <li role="separator" class="divider"></li>
-          <li><a href="#">Cancel Device</a></li>
+          <li><%= link_to "Cancel Device", virtual_machine_path(vm.id), remote: true, method: :delete, data: { loading_message: 'Destroying Server' } %></li>
         </ul>
       </li>
+      <% end %>
     </ul>
   </td>
 </tr>

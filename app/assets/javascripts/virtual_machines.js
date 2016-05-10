@@ -76,7 +76,6 @@ function scrollToPriceBoxAnchor() {
   $('#price_box .category-name a').click(function(e) {
     e.preventDefault();
     anchorHref = this.getAttribute('href');
-    console.log('going to... ' + anchorHref);
     $('html, body').animate({
       scrollTop: $(anchorHref).offset().top - 90
     }, 200);
