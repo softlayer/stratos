@@ -23,6 +23,12 @@
 #
 # and, you'll have to watch "config/Guardfile" instead of "Guardfile"
 
+# Workaround to make guard bundler works with bundler >= v1.12.0
+# more info https://github.com/guard/guard-bundler/issues/32
+Open3.popen3("gem contents bundler") do |i, o|
+  Kernel.system("gem install bundler") if o.read.empty?
+end
+
 guard :bundler do
   require 'guard/bundler'
   require 'guard/bundler/verify'
