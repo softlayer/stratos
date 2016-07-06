@@ -19,6 +19,7 @@ class StoreHash::Region
   end
 
   def datacenters_conflicts_for(group_id)
+    return @dcs_hash.keys if datacenters_for(group_id) == nil
     @dcs_hash.keys - datacenters_for(group_id)
   end
 
