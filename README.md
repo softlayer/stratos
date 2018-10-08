@@ -21,7 +21,7 @@ If you'd like to test in a production environment, it's normal rails deployment,
 Don't worry about logging with your API user and key, because Stratos was develop to avoid data leakage, so we assume some premisses:
 
 * We store your API user and key as a cookie on your browser (vanished when you close your browser)
-* Cookies are signed with rails app key and stored in _encrypted_ form, check this [page](http://api.rubyonrails.org/classes/ActionDispatch/Cookies.html]) for more info on cookies
+* Cookies are signed with rails app key and stored in _encrypted_ form, check this [page](http://api.rubyonrails.org/classes/ActionDispatch/Cookies.html) for more info on cookies
 * API Key won't be saved on log, as you log, Rails will replace and show `"api_key"=>"[FILTERED]"` on log
 * Disabled logging on Jobs that receive api user / key to process API info on background.
 * We connect to SoftLayer API using HTTPS
